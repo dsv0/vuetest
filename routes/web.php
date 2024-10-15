@@ -6,6 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\AdsController;
 
+Route::get('/admin', function () {
+    return view('admin');
+});
 Route::get('/admin/users', function () {
     return view('users');
 });

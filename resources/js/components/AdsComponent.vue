@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Ad Management</h2>
+    <h2>Ads Management</h2>
     <table class="table">
       <thead>
         <tr>
@@ -29,59 +29,66 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-primary" @click="showCreateModal = true">Создать новое объявление</button>
-    <div v-if="showCreateModal" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="showCreateModal = false">&times;</span>
-        <h2>Create Ad</h2>
-        <form @submit.prevent="createAd">
-          <div>
-            <label for="title">Title</label>
-            <input type="text" v-model="newAd.title" required>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAdModal">Создать новое объявление</button>
+
+    <div class="modal fade" id="createAdModal" tabindex="-1" aria-labelledby="createAdModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createAdModalLabel">Создать объявление</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
           </div>
-          <div>
-            <label for="content">Content</label>
-            <textarea v-model="newAd.content" required></textarea>
+          <div class="modal-body">
+            <form @submit.prevent="createAd">
+              <div class="mb-3">
+                <label for="title" class="form-label">Заголовок</label>
+                <input type="text" v-model="newAd.title" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="content" class="form-label">Содержимое</label>
+                <textarea v-model="newAd.content" class="form-control" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="status" class="form-label">Статус</label>
+                <select v-model="newAd.status" class="form-select" required>
+                  <option value="active">Активен</option>
+                  <option value="pending">В ожидании</option>
+                  <option value="archived">В архиве</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="url" class="form-label">URL</label>
+                <input type="text" v-model="newAd.url" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="campaign_id" class="form-label">Кампания</label>
+                <select v-model="newAd.campaign_id" class="form-select" required>
+                  <option v-for="campaign in campaigns" :key="campaign.id" :value="campaign.id">
+                    {{ campaign.title }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="cpm" class="form-label">CPM</label>
+                <input type="number" v-model="newAd.cpm" step="0.01" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="budget" class="form-label">Бюджет</label>
+                <input type="number" v-model="newAd.budget" step="0.01" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="button_text" class="form-label">Текст кнопки</label>
+                <select v-model="newAd.button_text" class="form-select">
+                  <option value="Смотреть">Смотреть</option>
+                  <option value="Оставить заявку">Оставить заявку</option>
+                  <option value="Скачать">Скачать</option>
+                  <option value="Подробнее">Подробнее</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Создать</button>
+            </form>
           </div>
-          <div>
-            <label for="status">Status</label>
-            <select v-model="newAd.status">
-              <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="archived">Archived</option>
-            </select>
-          </div>
-          <div>
-            <label for="url">URL</label>
-            <input type="text" v-model="newAd.url" required>
-          </div>
-          <div>
-            <label for="campaign_id">Campaign</label>
-            <select v-model="newAd.campaign_id" required>
-              <option v-for="campaign in campaigns" :key="campaign.id" :value="campaign.id">
-                {{ campaign.title }}
-              </option>
-            </select>
-          </div>
-          <div>
-            <label for="cpm">CPM</label>
-            <input type="number" v-model="newAd.cpm" step="0.01" required>
-          </div>
-          <div>
-            <label for="budget">Budget</label>
-            <input type="number" v-model="newAd.budget" step="0.01" required>
-          </div>
-          <div>
-            <label for="button_text">Button Text</label>
-            <select v-model="newAd.button_text">
-              <option value="Смотреть">Смотреть</option>
-              <option value="Оставить заявку">Оставить заявку</option>
-              <option value="Скачать">Скачать</option>
-              <option value="Подробнее">Подробнее</option>
-            </select>
-          </div>
-          <button type="submit">Создать</button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
@@ -166,35 +173,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.table {
-  width: 100%;
-  margin-top: 20px;
-}
-.modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
-  padding-top: 60px;
-}
-.modal-content {
-  background-color: #fefefe;
-  margin: 5% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-</style>
